@@ -4,6 +4,10 @@ import { firestore } from '@/firebase';
 import { Box, Stack, Typography, Button, Modal, TextField } from '@mui/material';
 import WebcamCapture from '../components/cam';
 import { collection, getDoc, getDocs, setDoc, doc, query, deleteDoc } from 'firebase/firestore';
+import Visiongoogle from '../components/Visiongoogle';
+
+
+// import vision  from '@google-cloud/vision'
 
 const modalStyle = {
   position: 'absolute',
@@ -28,20 +32,6 @@ const Page = () => {
   const [cameraOpen, setCameraOpen] = useState<boolean>(false);
   const [image, setImage] = useState<string | null>(null);
   const [message, setMessage] = useState<string>('')
-
-  const CREDENTIALS= JSON.parse(JSON.stringify({
-    "type": "service_account",
-    "project_id": "carbide-kite-407618",
-    "private_key_id": "2404a24db0e482d179e3551233545aded65b53b7",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCTAf33cDG39rvB\ngMgBW1l1Y/HUwdVxRSTwQgj1HxzgNZD7EjQ8/yJ+w8IS7v6jp1zp8+6jZbcwqIWy\nC3sXoOCrQ7St1pqymyAffGQi1DmBEwZ7bRxYRh0K56flRboLlttNUXXbQbE5fURJ\nk2C/gYqyxKah/4P6iR/8oWVsHaiSBZAUCsDd8YuQG8l1aeNxggwXuL9Wf13gB4vl\nlwAwV/uk02I2ChjxY6faPhgr8nlB7RftYasaq1DOhbyr/Uy158vuFkqWTfrEtmKa\nqQSDwHKBx5DDodPxyUT2hiQBcTnmPtC0xmx/Ctq5NQ1yPMlBLkAGSdUjN0yaoCd7\nin34He1RAgMBAAECggEACLKwWcK3BF8aRJSXsOHcaQpS8Y9O71LjoL4NfOBcg2UT\n+RD+i4HegwDW46sloJ37TMHgs6UF6eB8uZg9jhw4EtYQk40MLedpBwfjfl6PcPRE\n2MpvyAbM+ttSRynhHESuoNRiLGkGgQPpBY/tZGNYJyPkxpbBUrJolLhhcXxPQCVy\nXlBR5G0zRjIOIr+p7BAZ4F3dg8m/8IgxCFeO5Z1IDyi+ts3cH++I5hvBQGMZbHfT\nUF8iZFkg9D1M1sOORR1zyFzZHAXTFM0aRLDkohdlt9TDOLeLDBIz303I9TQylpnm\npVP30A7Y+F4bAKoBYOpeDABL3IdFSSQXmOk/va5NgQKBgQDNjdA4Zx0NpHbUWneS\nqIRr1BjF+dqA5xhm2MQvSlaDoAM3dIVux+ZgwUBh4acB1Oxaq9NEyT+V9X8sgYpo\nTbzctvavbgpa+0swRg+oyNhR4eB6r4xdraFRtBbsJex7a0Dgi1hOjkqpwgect+FY\nN5Srndy1uBpjq7Y3Qro2aq8/wQKBgQC3FfD5MXY+XecjDS2bSCB2tw+hLq0/yRHE\nkXWjV3cpkx+dG3LkwGqldIirENN/C+/1uzN9UaAyFpSf0yUC6cyl/r3/Zn3+zCeY\nk2PFJfKUU2MTgUmw4l9cb9ZhsKUZZyl2Pb1/GFgCmv4L9KkPvv1UcYOrV6lQMa0X\n+VAM/18RkQKBgAEIKjhuRBYSckpEnf8Ne4SzDuDHjVJCVrwFcI6wN9j3T6zSl+zj\ncgOgVLtpD5aRxBH8dNYOkJQnJFlL2S8G3ODaxkhBLCoiwtDeOSvmvjdDBAZ5pSG/\nQmUPm2HaGuLPugamjG3whu1tPO6LecUgmk12QGplHzTK4uJKInctd+3BAoGATse6\nMP//iUaOtp5tCWw3y91pdEnJcrDqXFLa87YnKFSOPeQZxCSnvxot1K4g04Indu1e\ncoY1EFh3C26ndmF0FdlPmB5aCNGAGD8Tpzl08C4Ra8suElbWAch9zvtbj1q8lIxs\nhcvL0xMuTaaxOH1ONI/DwG6wBDnb6Xz13SHlnoECgYA8quxa2FOaM7tHLVQJFewN\nEuKcEirtRzIJpD+RovC46WwBX1qUgm2GkTw1mvYvzOqnasf7OzVMFKNZT5ETsba7\nBI9E6Ql7U7XLUin7WGLAxd5a7Ot0bnh/1nZlFbnTB07edignjkRgM9ESBKDaun13\nTtFObmd9TJ2jDwMYG82eHQ==\n-----END PRIVATE KEY-----\n",
-    "client_email": "vision-api-pantry-app@carbide-kite-407618.iam.gserviceaccount.com",
-    "client_id": "112608848399426108251",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vision-api-pantry-app%40carbide-kite-407618.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
-  }))
 
   interface Provider {
     inventory: string;
@@ -94,27 +84,6 @@ const Page = () => {
   const captureImage = (imageSrc: string) => {
     setImage(imageSrc);
   };
-
-
-  // this is the vision api code from here onwards...
-
-  // Imports the Google Cloud client library
-  const vision = require('@google-cloud/vision');
-  
-  const CONFIG = {
-    credentials:{
-      private_key: CREDENTIALS.private_key,
-      client_email: CREDENTIALS.client_email
-    }
-  }
-  // Creates a client
-  const client = new vision.ImageAnnotatorClient(CONFIG);
-  // Performs label detection on the image file
-  const detectLandmark = async (filepath: string) => {
-    const [result] = await client.landmarkDetection(filepath);
-    console.log(result);
-  }
-  detectLandmark('../../public/badshahi_mosque.jpeg');
 
   return (
     <Box
@@ -249,6 +218,7 @@ const Page = () => {
           ))}
         </Stack>
       </Box>
+      <Visiongoogle />
     </Box>
   );
 };
