@@ -31,7 +31,7 @@ Here are some screenshots of the Pantry Tracker application:
 ![Home Screen](Screenshosts/home.png)
 
 ### Add Item
-![Add Item](Screenshots/add.png)
+![Add Item](Screenshosts/add.png)
 
 ### Image Text Generation
 ![Text Generation](Screenshots/image.png)
