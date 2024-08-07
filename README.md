@@ -41,7 +41,6 @@ Here are some screenshots of the Pantry Tracker application:
 
 ![Item Removed](Screenshots/item-removed.png)
 =======
-- **User Authentication:** Secure login and registration system.
 
 
 ## Getting Started
