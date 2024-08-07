@@ -4,8 +4,7 @@ import { Button, Box, Typography, Stack, TextField } from '@mui/material';
 import { PhotoCamera, Upload } from '@mui/icons-material';
 import Visiongoogle from './Visiongoogle';
 import { res }  from './Visiongoogle'
-import pathtoimg from '@/utils/pathtoimg';
-
+import { convertImg } from '@/utils/ConvertImg';
 
 interface WebcamCaptureProps {
   onCapture: (imageSrc: string) => void;
@@ -37,7 +36,11 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
         const imageSrc = reader.result as string;
         setCapturedImage(imageSrc);
         onImageUpload(imageSrc);
-        setFilePath('/home/gosal/Documents/coding/fellowship/pantry-management-app/public/img.jpg');
+
+        const imgsrc = convertImg(imageSrc);
+        imgsrc.then((response)=>{
+          setFilePath(response)
+        })
       };
       reader.readAsDataURL(event.target.files[0]);
     }

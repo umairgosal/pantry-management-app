@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { v2 as cloudinary } from 'cloudinary';
 
 const API_KEY = process.env.GOOGLE_VISION_API_KEY;
 
 export async function getServar (filePath: string) {
   // filePath = ' ';
-  console.log(filePath)
+  console.log("gosa_filepath",filePath)
   const filePathToUse: string = typeof filePath === 'string' ? filePath : String(filePath);
   // console.log("filepath in api request",filePathToUse);
   // try {
@@ -42,3 +43,4 @@ export async function getServar (filePath: string) {
   //   return  {error: 'Error fetching text'} 
   //   }
 }
+

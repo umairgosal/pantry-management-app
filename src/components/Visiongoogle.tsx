@@ -21,6 +21,7 @@ const Visiongoogle = ({filePath}: Proptype) => {
   }, []);
 
   const getDataFromServer = () => {
+    console.log("filepath in tsx", filePath)
     const textDataa = getServar(filePath);
     textDataa.then((value)=>{
       res = value;
