@@ -103,8 +103,6 @@ Before you begin, ensure you have the following installed:
 - **Next.js:** React framework for server-side rendering and static site generation.
 - **Firebase:** Backend-as-a-Service (BaaS) for database, authentication, and storage.
 - **Tailwind CSS:** Utility-first CSS framework for styling.
-- **TensorFlow.js:** Library for machine learning in JavaScript (for AI text generation).
-
 ## Contributing
 
 Contributions are welcome! Please follow these steps:
@@ -120,7 +118,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For questions or suggestions, please contact [your email](mailto:your.email@example.com).
+For questions or suggestions, please contact [your email](mailto:umairgosal123@gmail.com).
 
 ---
 
