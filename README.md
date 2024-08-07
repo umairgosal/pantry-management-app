@@ -28,18 +28,18 @@ Pantry Tracker is a pantry management application built with Next.js and Firebas
 Here are some screenshots of the Pantry Tracker application:
 
 ### Home Screen
-![Home Screen](Screenshosts/home.png)
+![Home Screen](Screenshots/home.png)
 
 ### Add Item
-![Add Item](Screenshosts/add.png)
+![Add Item](Screenshots/add.png)
 
 ### Image Text Generation
 ![Text Generation](Screenshots/image.png)
 
 ### Removing Items
-![](Screenshosts/item remove.png)
+![](Screenshots/item-remove.png)
 
-![Item Removed](Screenshots/item removed.png)
+![Item Removed](Screenshots/item-removed.png)
 
 ## Getting Started
 
