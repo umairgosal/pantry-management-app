@@ -2,21 +2,26 @@
 import { useEffect } from 'react';
 import { getServar } from '../utils/Vision.getServar';
 import React from "react"
+// import { filePath } from './cam';
+
 
 interface VisiongoogleProps {
   text?: string;
   error?: string;
 }
+interface Proptype {
+  filePath: string
+}
 let res: string | undefined;
 let myArray: string[];
 
-const Visiongoogle = () => {
+const Visiongoogle = ({filePath}: Proptype) => {
   useEffect(()=>{
     res = getDataFromServer();
   }, []);
 
   const getDataFromServer = () => {
-    const textDataa = getServar();
+    const textDataa = getServar(filePath);
     textDataa.then((value)=>{
       res = value;
       // console.log(res)
@@ -34,15 +39,15 @@ const Visiongoogle = () => {
   // }
   return(
     <div>
-      <p className='text-black'>{res}</p>
+      {/* <p className='text-black'>{res}</p> */}
       {/* {res ? (
         <p>Extracted Text: {res}</p>
         ) : (
         <p>Loading...</p>
-      )} */}
+      // )} */}
     </div>
   )
 }
 
-
 export default Visiongoogle
+export { res } 
