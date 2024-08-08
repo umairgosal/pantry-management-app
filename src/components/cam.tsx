@@ -47,7 +47,7 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
     }
   };
   const generateTextFromImage = () => {
-    console.log(res)
+    console.log("Generated text:"+res)
     if (capturedImage && res != undefined) {
       setGeneratedText(res);
     }
