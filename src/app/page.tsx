@@ -218,7 +218,6 @@ const Page = () => {
           ))}
         </Stack>
       </Box>
-      <Visiongoogle />
     </Box>
   );
 };

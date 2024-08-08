@@ -2,6 +2,9 @@ import React, { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import { Button, Box, Typography, Stack, TextField } from '@mui/material';
 import { PhotoCamera, Upload } from '@mui/icons-material';
+import Visiongoogle from './Visiongoogle';
+import { res }  from './Visiongoogle'
+import { convertImg } from '@/utils/ConvertImg';
 
 interface WebcamCaptureProps {
   onCapture: (imageSrc: string) => void;
@@ -13,7 +16,8 @@ interface WebcamCaptureProps {
 const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onImageUpload, image }) => {
   const webcamRef = useRef<Webcam>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(image || null);
-  const [generatedText, setGeneratedText] = useState<string>('');
+  const [generatedText, setGeneratedText] = useState<string>();
+  const [filePath, setFilePath] = useState<string>('');
 
   const capture = () => {
     if (webcamRef.current) {
@@ -32,19 +36,25 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
         const imageSrc = reader.result as string;
         setCapturedImage(imageSrc);
         onImageUpload(imageSrc);
+
+        const imgsrc = convertImg(imageSrc);
+        imgsrc.then((response)=>{
+          setFilePath(response)
+
+        })
       };
       reader.readAsDataURL(event.target.files[0]);
     }
   };
-
   const generateTextFromImage = () => {
-    // Implement AI logic here to generate text from image
-    if (capturedImage) {
-      setGeneratedText('Generated text from the image.');
+    console.log(res)
+    if (capturedImage && res != undefined) {
+      setGeneratedText(res);
     }
   };
 
   return (
+    <>
     <Box
       sx={{
         position: 'absolute',
@@ -78,6 +88,14 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
       <Stack width="100%" direction="column" spacing={2} alignItems="center">
         <Button
           variant="contained"
+          color="secondary"
+          startIcon={<PhotoCamera />}
+          onClick={capture}
+        >
+          Capture Image
+        </Button>
+        <Button
+          variant="contained"
           color="primary"
           component="label"
           startIcon={<Upload />}
@@ -90,14 +108,7 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
             onChange={handleImageUpload}
           />
         </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          startIcon={<PhotoCamera />}
-          onClick={capture}
-        >
-          Capture Image
-        </Button>
+
         {capturedImage && (
           <Box mt={2}>
             <img 
@@ -115,7 +126,7 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
           variant="contained"
           color="primary"
           onClick={generateTextFromImage}
-          disabled={!capturedImage}
+          // disabled={!capturedImage}
         >
           Generate Text
         </Button>
@@ -137,10 +148,14 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
         color="primary"
         onClick={onClose}
         sx={{ mt: 2 }}
-      >
+        >
         Close
       </Button>
     </Box>
+    {filePath && 
+      <Visiongoogle filePath={filePath}></Visiongoogle>
+    }
+    </>
   );
 };
 

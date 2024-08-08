@@ -1,14 +1,11 @@
 import axios from 'axios';
+import { v2 as cloudinary } from 'cloudinary';
 
 const API_KEY = process.env.GOOGLE_VISION_API_KEY;
 
-
-
-export async function getServar () {
-  const filePath = 'https://legaltemplates.net/wp-content/uploads/receipt-template.png';
-
+export async function getServar (filePath: string) {
   const filePathToUse: string = typeof filePath === 'string' ? filePath : String(filePath);
-
+  // console.log("filepath in api request",filePathToUse);
   // try {
     const response = await axios.post(
       `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`,
@@ -32,8 +29,8 @@ export async function getServar () {
 
     const textData: string = response.data.responses[0].fullTextAnnotation?.text;
     const returnedData = JSON.stringify(textData);
+    console.log("gosal",textData);
     if(returnedData != null){
-      // console.log("gosal",returnedData);
       return returnedData;
     } else{
       console.log("caught error at getServarfile")
@@ -44,3 +41,4 @@ export async function getServar () {
   //   return  {error: 'Error fetching text'} 
   //   }
 }
+
