@@ -35,7 +35,7 @@ const Visiongoogle = ({filePath}: Proptype) => {
       //   myArray = ress.split('\\n');
       //   console.log("myArray",myArray);
       // }
-      console.log(ress)
+      console.log("ress:"+ress)
       return ress;
     }
   return(

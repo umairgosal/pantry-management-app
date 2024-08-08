@@ -121,7 +121,7 @@ const Page = () => {
               color="primary"
               onClick={() => {
                 if (newItem.trim()) {
-                  handleInventoryUpdate(newItem, true);
+                  handleInventoryUpdate(newItem.charAt(0).toUpperCase() + newItem.slice(1), true);
                   setNewItem('');
                   handleClose();
                 }

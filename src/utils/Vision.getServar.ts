@@ -2,10 +2,10 @@ import axios from 'axios';
 import { v2 as cloudinary } from 'cloudinary';
 
 const API_KEY = process.env.GOOGLE_VISION_API_KEY;
-
+console.log("api key"+API_KEY)
 export async function getServar (filePath: string) {
   const filePathToUse: string = typeof filePath === 'string' ? filePath : String(filePath);
-  // console.log("filepath in api request",filePathToUse);
+  console.log("filepath in api request",filePathToUse);
   // try {
     const response = await axios.post(
       `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`,
