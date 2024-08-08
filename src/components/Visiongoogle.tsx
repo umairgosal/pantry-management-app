@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getServar } from '../utils/Vision.getServar';
 import React from "react"
 // import { filePath } from './cam';
@@ -14,40 +14,34 @@ interface Proptype {
 }
 let res: string | undefined;
 let myArray: string[];
+let ress: string | undefined;
 
 const Visiongoogle = ({filePath}: Proptype) => {
-  useEffect(()=>{
-    res = getDataFromServer();
-  }, []);
-
-  const getDataFromServer = () => {
-    console.log("filepath in tsx", filePath)
-    const textDataa = getServar(filePath);
-    textDataa.then((value)=>{
-      res = value;
-      // console.log(res)
+  if(filePath != null){
+    useEffect(()=>{
+      const resltfrmserver = getDataFromServer();
+      resltfrmserver.then((value)=>{
+        res = value;
       })
-      return res;
-    }
+    }, []);
+  }
 
-    if(res != undefined){
-      myArray = res.split('\\n');
-      console.log("myArray",myArray);
+  const getDataFromServer = async () => {
+    const textDataa = getServar(filePath);
+    await textDataa.then((value)=>{
+      ress = value;
+    })
+    // if(ress != undefined){
+      //   myArray = ress.split('\\n');
+      //   console.log("myArray",myArray);
+      // }
+      console.log(ress)
+      return ress;
     }
-  // console.log(textDataa)
-  // if(error) {
-  //   return <div>Error: {error}</div>
-  // }
   return(
-    <div>
-      {/* <p className='text-black'>{res}</p> */}
-      {/* {res ? (
-        <p>Extracted Text: {res}</p>
-        ) : (
-        <p>Loading...</p>
-      // )} */}
-    </div>
-  )
+    <>
+    </>
+  );
 }
 
 export default Visiongoogle

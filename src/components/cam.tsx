@@ -16,7 +16,7 @@ interface WebcamCaptureProps {
 const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onImageUpload, image }) => {
   const webcamRef = useRef<Webcam>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(image || null);
-  const [generatedText, setGeneratedText] = useState<string>('');
+  const [generatedText, setGeneratedText] = useState<string>();
   const [filePath, setFilePath] = useState<string>('');
 
   const capture = () => {
@@ -40,14 +40,14 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
         const imgsrc = convertImg(imageSrc);
         imgsrc.then((response)=>{
           setFilePath(response)
+
         })
       };
       reader.readAsDataURL(event.target.files[0]);
     }
   };
-
   const generateTextFromImage = () => {
-    // Implement AI logic here to generate text from image
+    console.log(res)
     if (capturedImage && res != undefined) {
       setGeneratedText(res);
     }
@@ -126,7 +126,7 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
           variant="contained"
           color="primary"
           onClick={generateTextFromImage}
-          disabled={!capturedImage}
+          // disabled={!capturedImage}
         >
           Generate Text
         </Button>
@@ -152,7 +152,7 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
         Close
       </Button>
     </Box>
-    {capturedImage && 
+    {filePath && 
       <Visiongoogle filePath={filePath}></Visiongoogle>
     }
     </>
