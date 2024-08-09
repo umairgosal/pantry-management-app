@@ -1,27 +1,17 @@
-import { useState } from 'react';
-import { collection, getDoc, getDocs, setDoc, doc, query, deleteDoc } from 'firebase/firestore';
-import { firestore } from '@/firebase';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '@/libs/firebase/firebase';
 
-let inventry: Array<any>;
+// Modify to accept userId
+const updateInventory = async (userId: string) => {
+  const inventoryRef = collection(firestore, 'users', userId, 'inventory');
+  const snapshot = await getDocs(inventoryRef);
+  const inventoryList = snapshot.docs.map(doc => ({
+    name: doc.id,
+    ...doc.data(),
+  }));
 
-
-const updateInventory = async () => {
-    // const [inventry, setInventry] = useState<Array<any>>([])
-    const snapshot = query(collection(firestore, 'inventory'));
-    const docs = await getDocs(snapshot);
-    const inventoryList = docs.docs.map(doc => ({
-      name: doc.id,
-      ...doc.data(),
-    }));
-    inventry = inventoryList;
-
-    return inventry;
-
-    
-    // setInventry(inventoryList);
+  console.log("userid in updated inventory:"+userId)
+  return inventoryList;
 };
 
-
-
-export default updateInventory
-export { inventry }
+export default updateInventory;

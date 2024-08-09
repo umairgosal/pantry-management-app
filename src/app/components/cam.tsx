@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-// import { toast } from 'react-toastify';
 import Webcam from 'react-webcam';
 import { Button, Box, Typography, Stack, TextField } from '@mui/material';
 import { PhotoCamera, Upload } from '@mui/icons-material';
@@ -8,36 +7,34 @@ import { convertImg } from '@/utils/ConvertImg';
 import handleInventoryUpdate from '@/utils/handleInventoryUpdate';
 
 interface WebcamCaptureProps {
+  userId?: string | undefined;
   onCapture: (imageSrc: string) => void;
   onClose: () => void;
   onImageUpload: (imageSrc: string) => void;
-  setItem: React.Dispatch<React.SetStateAction<any[]>>
+  setItem: React.Dispatch<React.SetStateAction<any[]>>;
   image?: string | null;
 }
 
-const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onImageUpload, setItem, image }) => {
+const WebcamCapture: React.FC<WebcamCaptureProps> = ({ userId, onCapture, onClose, onImageUpload, setItem, image }) => {
   const webcamRef = useRef<Webcam>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(image || null);
   const [generatedText, setGeneratedText] = useState<string>('');
   const [filePath, setFilePath] = useState<string>('');
-  const [fileType, setFileType] = useState<Boolean>(false);
-  const [shouldGenerateText, setShouldGenerateText] = useState<boolean>(false); // New state to track button click
+  const [fileType, setFileType] = useState<boolean>(false);
+  const [shouldGenerateText, setShouldGenerateText] = useState<boolean>(false);
 
   const capture = () => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       if (imageSrc) {
-        // Reset states for new image
         setCapturedImage(imageSrc);
         setGeneratedText('');
         setFilePath('');
         setFileType(true);
-        setShouldGenerateText(false); // Reset flag when a new image is captured
-
+        setShouldGenerateText(false);
         onCapture(imageSrc);
 
-        const imgsrc = convertImg(imageSrc);
-        imgsrc.then((response) => {
+        convertImg(imageSrc).then((response) => {
           setFilePath(response);
         });
       }
@@ -49,18 +46,14 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
       const reader = new FileReader();
       reader.onloadend = () => {
         const imageSrc = reader.result as string;
-
-        // Reset states for new image
         setCapturedImage(imageSrc);
         setGeneratedText('');
         setFilePath('');
         setFileType(false);
-        setShouldGenerateText(false); // Reset flag when a new image is uploaded
-
+        setShouldGenerateText(false);
         onImageUpload(imageSrc);
 
-        const imgsrc = convertImg(imageSrc);
-        imgsrc.then((response) => {
+        convertImg(imageSrc).then((response) => {
           setFilePath(response);
         });
       };
@@ -74,22 +67,22 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
 
   const generateTextFromImage = () => {
     if (filePath) {
-      setShouldGenerateText(true); // Set flag to true when the button is clicked
+      setShouldGenerateText(true);
     }
   };
 
   const addItemsToList = () => {
-    const myArray = generatedText.split('\\n');
-    // const addedItems = [];
-    myArray.forEach((item) => {
-      // handleInventoryUpdate(item, true, setItem);
-    const cleanedItem = item.replace(/^["']|["']$/g, ''); // Removes leading and trailing quotes
-      
-    handleInventoryUpdate(cleanedItem.charAt(0).toUpperCase() + cleanedItem.slice(1), true, setItem);
-    
-    });
-    alert(`Items added to the pantry`);
-  }
+    if (userId) {
+      const myArray = generatedText.split('\\n');
+      myArray.forEach((item) => {
+        const cleanedItem = item.replace(/^["']|["']$/g, '');
+        handleInventoryUpdate(userId, cleanedItem.charAt(0).toUpperCase() + cleanedItem.slice(1), true, setItem);
+      });
+      alert(`Items added to the pantry`);
+    } else {
+      console.error('User ID is required');
+    }
+  };
 
   return (
     <>
@@ -174,7 +167,7 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
             fullWidth
             multiline
             rows={4}
-            value={generatedText.split('\\n')}
+            value={generatedText}
             InputProps={{
               readOnly: true,
             }}
