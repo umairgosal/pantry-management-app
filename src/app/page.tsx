@@ -45,38 +45,6 @@ const Page = () => {
   const [image, setImage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>(''); // Search query state
 
-  // const updateInventory = async () => {
-  //   const snapshot = query(collection(firestore, 'inventory'));
-  //   const docs = await getDocs(snapshot);
-  //   const inventoryList = docs.docs.map(doc => ({
-  //     name: doc.id,
-  //     ...doc.data(),
-  //   }));
-  //   setInventory(inventoryList);
-  // };
-
-  // const handleInventoryUpdate = async (item: string, increment: boolean) => {
-  //   const docRef = doc(collection(firestore, 'inventory'), item);
-  //   const docSnap = await getDoc(docRef);
-
-  //   if (docSnap.exists()) {
-  //     const { count } = docSnap.data();
-  //     if (increment) {
-  //       await setDoc(docRef, { count: count + 1 });
-  //     } else {
-  //       if (count > 1) {
-  //         await setDoc(docRef, { count: count - 1 });
-  //       } else {
-  //         await deleteDoc(docRef);
-  //       }
-  //     }
-  //   } else if (increment) {
-  //     await setDoc(docRef, { count: 1 });
-  //   }
-
-  //   updateInventory();
-  // };
-
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.toLowerCase();
     setSearchQuery(value);
@@ -320,30 +288,12 @@ const Page = () => {
           aria-labelledby="camera-modal-title"
           aria-describedby="camera-modal-description"
         >
-          <Box sx={modalStyle}>
-            <Typography id="camera-modal-title" variant="h6" component="h2">
-              Capture Image
-            </Typography>
             <WebcamCapture
               onCapture={captureImage}
               onClose={handleCameraClose}
               onImageUpload={handleImageUpload}
               setItem={setInventory}
             />
-            {image && (
-              <Box mt={2}>
-                <img src={image} alt="Captured" width="100%" />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => setImage(null)}
-                  sx={buttonStyle}
-                >
-                  Remove Image
-                </Button>
-              </Box>
-            )}
-          </Box>
         </Modal>
       </Box>
     </Box>

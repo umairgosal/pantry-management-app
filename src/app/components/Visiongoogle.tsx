@@ -1,49 +1,42 @@
 'use client'
 import { useEffect, useState } from 'react';
+<<<<<<< HEAD:src/app/components/Visiongoogle.tsx
 import { getServar } from '../../utils/Vision.getServar';
 import React from "react"
 // import { filePath } from './cam';
 
+=======
+import { getServar } from '../utils/Vision.getServar';
+import React from "react";
+>>>>>>> fcf584d (camera component refactor):src/components/Visiongoogle.tsx
 
 interface VisiongoogleProps {
-  text?: string;
-  error?: string;
+  filePath: string;
+  fileType: Boolean;
+  onTextGenerated: (text: string) => void;
 }
-interface Proptype {
-  filePath: string
-  fileType: Boolean
-}
-let res: string | undefined;
-let myArray: string[];
-let ress: string | undefined;
 
-const Visiongoogle = ({filePath, fileType}: Proptype) => {
-  if(filePath != null){
-    useEffect(()=>{
-      const resltfrmserver = getDataFromServer();
-      resltfrmserver.then((value)=>{
-        res = value;
-      })
-    }, []);
-  }
+const Visiongoogle: React.FC<VisiongoogleProps> = ({ filePath, fileType, onTextGenerated }) => {
+  useEffect(() => {
+    if (filePath) {
+      getDataFromServer();
+    }
+  }, [filePath]);
 
   const getDataFromServer = async () => {
-    const textDataa = getServar(filePath, fileType);
-    await textDataa.then((value)=>{
-      ress = value;
-    })
-    // if(ress != undefined){
-      //   myArray = ress.split('\\n');
-      //   console.log("myArray",myArray);
-      // }
-      console.log("ress:"+ress)
-      return ress;
+    try {
+      const textData = await getServar(filePath, fileType);
+      if (textData) {
+        const cleanedTextGenerated = textData.replace(/^["']|["']$/g, ''); // Removes leading and trailing quotes
+        onTextGenerated(cleanedTextGenerated);
+      }
+    } catch (error) {
+      console.error("Error fetching data from server:", error);
+      onTextGenerated("Error generating text from image.");
     }
-  return(
-    <>
-    </>
-  );
-}
+  };
 
-export default Visiongoogle
-export { res } 
+  return <></>;
+};
+
+export default Visiongoogle;
