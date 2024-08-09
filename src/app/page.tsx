@@ -2,7 +2,7 @@
 import React, { useState, useEffect, isValidElement } from 'react';
 import { firestore } from '@/firebase';
 import { Box, Stack, Typography, Button, Modal, TextField, Avatar, IconButton, Autocomplete } from '@mui/material';
-import WebcamCapture from '../components/cam';
+import WebcamCapture from './components/cam';
 import { collection, getDoc, getDocs, setDoc, doc, query, deleteDoc } from 'firebase/firestore';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import AddIcon from '@mui/icons-material/Add';
@@ -131,36 +131,35 @@ const Page = () => {
     <Box display="flex" height="100vh">
       {/* Sidebar */}
       <Box
-  width="250px"
-  bgcolor="#ffffff"
-  boxShadow="2px 0 10px rgba(0, 0, 0, 0.1)"
-  p={2}
-  display="flex"
-  flexDirection="column"
-  alignItems="center" 
-  justifyContent="space-between"
->
-  <Box display="flex" flexDirection="column" alignItems="center">
-    <Avatar />
-    <Typography variant="h6" color="#333" mb={1} mt={2} align="center">
-      Welcome, User
-    </Typography>
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={() => console.log('Logout')}
-      sx={{
-        ...buttonStyle,
-        backgroundColor: '#6c63ff', 
-        padding: '6px 16px', 
-        fontSize: '0.875rem', 
-      }}
-    >
+        width="250px"
+        bgcolor="#ffffff"
+        boxShadow="2px 0 10px rgba(0, 0, 0, 0.1)"
+        p={2}
+        display="flex"
+        flexDirection="column"
+        alignItems="center" 
+        justifyContent="space-between"
+        >
+      <Box display="flex" flexDirection="column" alignItems="center">
+      <Avatar />
+      <Typography variant="h6" color="#333" mb={1} mt={2} align="center">
+        Welcome, User
+      </Typography>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => console.log('Logout')}
+        sx={{
+          ...buttonStyle,
+          backgroundColor: '#6c63ff', 
+          padding: '6px 16px', 
+          fontSize: '0.875rem', 
+        }}
+      >
       Logout
-    </Button>
-  </Box>
-</Box>
-
+      </Button>
+      </Box>
+      </Box>
 
       {/* Main Content */}
       <Box
@@ -204,23 +203,23 @@ const Page = () => {
               startAdornment: <SearchIcon />,
             }}
           />
-<Button
-  variant="contained"
-  color="primary"
-  onClick={handleOpen}
-  sx={{
-    fontWeight: 'bold',
-    borderRadius: '12px',
-    padding: '4px 8px',
-    fontSize: '0.75rem',
-    ml: 2,
-    height: '55px', 
-    minWidth: '100px', 
-    boxShadow: 'none', 
-  }}
->
-  Add Item
-</Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpen}
+            sx={{
+              fontWeight: 'bold',
+              borderRadius: '12px',
+              padding: '4px 8px',
+              fontSize: '0.75rem',
+              ml: 2,
+              height: '55px', 
+              minWidth: '100px', 
+              boxShadow: 'none', 
+            }}
+          >
+            Add Item
+          </Button>
         </Box>
 
         <Box

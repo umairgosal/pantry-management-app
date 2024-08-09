@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { getServar } from '../utils/Vision.getServar';
+import { getServar } from '../../utils/Vision.getServar';
 import React from "react"
 // import { filePath } from './cam';
 
