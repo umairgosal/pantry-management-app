@@ -11,12 +11,13 @@ interface VisiongoogleProps {
 }
 interface Proptype {
   filePath: string
+  fileType: Boolean
 }
 let res: string | undefined;
 let myArray: string[];
 let ress: string | undefined;
 
-const Visiongoogle = ({filePath}: Proptype) => {
+const Visiongoogle = ({filePath, fileType}: Proptype) => {
   if(filePath != null){
     useEffect(()=>{
       const resltfrmserver = getDataFromServer();
@@ -27,7 +28,7 @@ const Visiongoogle = ({filePath}: Proptype) => {
   }
 
   const getDataFromServer = async () => {
-    const textDataa = getServar(filePath);
+    const textDataa = getServar(filePath, fileType);
     await textDataa.then((value)=>{
       ress = value;
     })
