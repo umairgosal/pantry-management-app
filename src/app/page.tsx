@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, isValidElement } from 'react';
 import { firestore } from '@/firebase';
 import { Box, Stack, Typography, Button, Modal, TextField, Avatar, IconButton, Autocomplete } from '@mui/material';
 import WebcamCapture from '../components/cam';
@@ -10,6 +10,9 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import PlusOneIcon from '@mui/icons-material/PlusOne';
+import handleInventoryUpdate from '@/utils/handleInventoryUpdate';
+import { inventry } from '@/utils/updateInventory';
+import updateInventory from '@/utils/updateInventory';
 
 const modalStyle = {
   position: 'absolute',
@@ -42,54 +45,74 @@ const Page = () => {
   const [image, setImage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>(''); // Search query state
 
-  const updateInventory = async () => {
-    const snapshot = query(collection(firestore, 'inventory'));
-    const docs = await getDocs(snapshot);
-    const inventoryList = docs.docs.map(doc => ({
-      name: doc.id,
-      ...doc.data(),
-    }));
-    setInventory(inventoryList);
-  };
+  // const updateInventory = async () => {
+  //   const snapshot = query(collection(firestore, 'inventory'));
+  //   const docs = await getDocs(snapshot);
+  //   const inventoryList = docs.docs.map(doc => ({
+  //     name: doc.id,
+  //     ...doc.data(),
+  //   }));
+  //   setInventory(inventoryList);
+  // };
 
-  const handleInventoryUpdate = async (item: string, increment: boolean) => {
-    const docRef = doc(collection(firestore, 'inventory'), item);
-    const docSnap = await getDoc(docRef);
+  // const handleInventoryUpdate = async (item: string, increment: boolean) => {
+  //   const docRef = doc(collection(firestore, 'inventory'), item);
+  //   const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-      const { count } = docSnap.data();
-      if (increment) {
-        await setDoc(docRef, { count: count + 1 });
-      } else {
-        if (count > 1) {
-          await setDoc(docRef, { count: count - 1 });
-        } else {
-          await deleteDoc(docRef);
-        }
-      }
-    } else if (increment) {
-      await setDoc(docRef, { count: 1 });
-    }
+  //   if (docSnap.exists()) {
+  //     const { count } = docSnap.data();
+  //     if (increment) {
+  //       await setDoc(docRef, { count: count + 1 });
+  //     } else {
+  //       if (count > 1) {
+  //         await setDoc(docRef, { count: count - 1 });
+  //       } else {
+  //         await deleteDoc(docRef);
+  //       }
+  //     }
+  //   } else if (increment) {
+  //     await setDoc(docRef, { count: 1 });
+  //   }
 
-    updateInventory();
-  };
+  //   updateInventory();
+  // };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.toLowerCase();
     setSearchQuery(value);
 
     if (value) {
-      const filteredInventory = inventory.filter(item =>
+      const filteredInventory = inventry.filter(item =>
         item.name.toLowerCase().includes(value)
       );
       setInventory(filteredInventory);
     } else {
-      updateInventory(); // If the search query is empty, reset the inventory list
+      const reslt = updateInventory(); // If the search query is empty, reset the inventory list
+      reslt.then((value)=>{
+        console.log("value returned handleSearchChange",value);
+        setInventory(value);
+      }) 
     }
+  };
+  
+  const handleDeleteItem = async (item: string) => {
+    const docRef = doc(collection(firestore, 'inventory'), item);
+    await deleteDoc(docRef);
+    const reslt = updateInventory();
+        reslt.then((value)=>{
+      console.log("value returned handleDeleteItem",value);
+      setInventory(value);
+    })
   };
 
   useEffect(() => {
-    updateInventory();
+    const reslt = updateInventory();
+    reslt.then((value)=>{
+      console.log("value returned ",value);
+      setInventory(value);
+    })
+    handleSearchChange;
+    handleDeleteItem;
   }, []);
 
   const handleOpen = () => setOpen(true);
@@ -103,11 +126,6 @@ const Page = () => {
     setImage(imageSrc);
   };
 
-  const handleDeleteItem = async (item: string) => {
-    const docRef = doc(collection(firestore, 'inventory'), item);
-    await deleteDoc(docRef);
-    updateInventory();
-  };
 
   return (
     <Box display="flex" height="100vh">
@@ -237,13 +255,13 @@ const Page = () => {
                 <Box>
                   <IconButton
                     color="primary"
-                    onClick={() => handleInventoryUpdate(name, true)}
+                    onClick={() => handleInventoryUpdate(name, true, setInventory)}
                   >
                     <AddIcon />
                   </IconButton>
                   <IconButton
                     color="secondary"
-                    onClick={() => handleInventoryUpdate(name, false)}
+                    onClick={() => handleInventoryUpdate(name, false, setInventory)}
                   >
                     <RemoveIcon />
                   </IconButton>
@@ -255,7 +273,8 @@ const Page = () => {
                   </IconButton>
                 </Box>
               </Box>
-            ))}
+            ))
+          }
           </Stack>
         </Box>
 
@@ -284,7 +303,7 @@ const Page = () => {
               color="primary"
               onClick={() => {
                 if (newItem.trim()) {
-                  handleInventoryUpdate(newItem.charAt(0).toUpperCase() + newItem.slice(1), true);
+                  handleInventoryUpdate(newItem.charAt(0).toUpperCase() + newItem.slice(1), true, setInventory);
                   setNewItem('');
                   handleClose();
                 }
@@ -310,6 +329,7 @@ const Page = () => {
               onCapture={captureImage}
               onClose={handleCameraClose}
               onImageUpload={handleImageUpload}
+              setItem={setInventory}
             />
             {image && (
               <Box mt={2}>
