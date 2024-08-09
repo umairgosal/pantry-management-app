@@ -20,7 +20,7 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
   const [capturedImage, setCapturedImage] = useState<string | null>(image || null);
   const [generatedText, setGeneratedText] = useState<string>();
   const [filePath, setFilePath] = useState<string>('');
-  // const [inventory, setInventory] = useState<Array<any>>([]);
+  const [fileType, setFileType] = useState<Boolean>(false);
 
   const capture = () => {
     if (webcamRef.current) {
@@ -28,7 +28,13 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
       if (imageSrc) {
         setCapturedImage(imageSrc);
         onCapture(imageSrc);
-      }
+
+        const imgsrc = convertImg(imageSrc);
+        imgsrc.then((response)=>{
+          setFilePath(response)
+          setFileType(true)
+        })
+      };
     }
   };
 
@@ -43,6 +49,7 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
         const imgsrc = convertImg(imageSrc);
         imgsrc.then((response)=>{
           setFilePath(response)
+          setFileType(false);
 
         })
       };
@@ -176,8 +183,8 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
         Close
       </Button>
     </Box>
-    {filePath && 
-      <Visiongoogle filePath={filePath}></Visiongoogle>
+    {filePath &&
+      <Visiongoogle filePath={filePath} fileType={fileType}></Visiongoogle>
     }
     </>
   );
