@@ -5,19 +5,22 @@ import { PhotoCamera, Upload } from '@mui/icons-material';
 import Visiongoogle from './Visiongoogle';
 import { res }  from './Visiongoogle'
 import { convertImg } from '@/utils/ConvertImg';
+import handleInventoryUpdate from '@/utils/handleInventoryUpdate';
 
 interface WebcamCaptureProps {
   onCapture: (imageSrc: string) => void;
   onClose: () => void;
   onImageUpload: (imageSrc: string) => void;
+  setItem: React.Dispatch<React.SetStateAction<any[]>>
   image?: string | null;
 }
 
-const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onImageUpload, image }) => {
+const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onImageUpload, setItem,  image }) => {
   const webcamRef = useRef<Webcam>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(image || null);
   const [generatedText, setGeneratedText] = useState<string>();
   const [filePath, setFilePath] = useState<string>('');
+  // const [inventory, setInventory] = useState<Array<any>>([]);
 
   const capture = () => {
     if (webcamRef.current) {
@@ -46,12 +49,26 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
       reader.readAsDataURL(event.target.files[0]);
     }
   };
+
   const generateTextFromImage = () => {
     console.log("Generated text:"+res)
     if (capturedImage && res != undefined) {
       setGeneratedText(res);
     }
   };
+
+  const addItemsToList = () => {
+    // myArray = res?.substring(1, res.length-2)
+    const myArray = res?.split('\\n');
+    // if(myArray != null && res != undefined){
+    //   myArray[0] = myArray[0].substring(1, res?.length-2)
+    //   myArray[res?.length-2] = myArray[res?.length-2].substring(0 , res?.length-3);
+      myArray?.map((item)=>{
+        handleInventoryUpdate(item, true, setItem);
+
+      })
+    // }
+  }
 
   return (
     <>
@@ -142,6 +159,13 @@ const WebcamCapture: React.FC<WebcamCaptureProps> = ({ onCapture, onClose, onIma
           }}
           sx={{ mt: 2 }}
         />
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={addItemsToList}
+          >
+            Add Reciept Items
+        </Button>
       </Stack>
       <Button
         variant="contained"
