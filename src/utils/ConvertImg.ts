@@ -14,11 +14,10 @@ export async function convertImg(file__: string) {
         const resp: string = await cloudinary.uploader
         .upload(file__)
         .then((result)=>{
-            console.log("result",result.secure_url)
             return result.secure_url;
         })
         .catch((err) => {
-            console.error("error form convertimg", err)
+            console.error("error form convertimg")
             return err;
         });
         return resp;
