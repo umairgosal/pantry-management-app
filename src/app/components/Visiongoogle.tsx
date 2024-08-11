@@ -25,7 +25,7 @@ const Visiongoogle: React.FC<VisiongoogleProps> = ({ filePath, fileType, onTextG
         onTextGenerated(cleanedTextGenerated);
       }
     } catch (error) {
-      console.error("Error fetching data from server:", error);
+      console.error("Error fetching data from server:");
       onTextGenerated("Error generating text from image.");
     }
   };

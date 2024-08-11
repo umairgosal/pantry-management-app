@@ -67,7 +67,6 @@ const Page = () => {
 
       const fetchInventory = async () => {
         const inventoryList = await updateInventory(userId);
-        console.log("value returned", inventoryList);
         setInventory(inventoryList);
       };
       fetchInventory();
@@ -87,7 +86,6 @@ const Page = () => {
       if (userId) {
         const fetchInventory = async () => {
           const inventoryList = await updateInventory(userId);
-          console.log("value returned handleSearchChange", inventoryList);
           setInventory(inventoryList);
         };
         fetchInventory();
@@ -100,7 +98,6 @@ const Page = () => {
       const docRef = doc(collection(firestore, 'users', userId, 'inventory'), item);
       await deleteDoc(docRef);
       const inventoryList = await updateInventory(userId);
-      console.log("value returned handleDeleteItem", inventoryList);
       setInventory(inventoryList);
     }
   };

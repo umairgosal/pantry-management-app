@@ -10,7 +10,6 @@ const updateInventory = async (userId: string) => {
     ...doc.data(),
   }));
 
-  console.log("userid in updated inventory:"+userId)
   return inventoryList;
 };
 

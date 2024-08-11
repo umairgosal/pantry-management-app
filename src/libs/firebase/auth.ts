@@ -24,7 +24,7 @@ export async function signInWithGoogle() {
     }
     return result.user.uid;
   } catch (error) {
-    console.error('Error signing in with Google', error);
+    console.error('Error signing in with Google');
   }
 }
 
@@ -32,7 +32,7 @@ export async function signOutWithGoogle() {
   try {
     await firebaseAuth.signOut();
   } catch (error) {
-    console.error('Error signing out with Google', error);
+    console.error('Error signing out with Google');
   }
 }
 
@@ -45,7 +45,7 @@ export async function signUpWithEmail(email: string, password: string) {
     }
     return result.user.uid;
   } catch (error) {
-    console.error('Error signing up with email', error);
+    console.error('Error signing up with email');
   }
 }
 
@@ -58,6 +58,6 @@ export async function signInWithEmail(email: string, password: string) {
     }
     return result.user.uid;
   } catch (error) {
-    console.error('Error signing in with email', error);
+    console.error('Error signing in with email');
   }
 }

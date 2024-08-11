@@ -10,19 +10,13 @@ const handleInventoryUpdate = async (
 ) => {
   try {
     if (typeof userId !== 'string' || typeof item !== 'string') {
-      console.error('userId and item must be strings');
       return;
     }
 
-    console.log('userId:', userId);
-    console.log('item:', item);
-
     const inventoryRef = collection(firestore, 'users', userId, 'inventory');
     const docRef = doc(inventoryRef, item);
-    console.log('Firestore Document Reference:', docRef.path);
 
     const docSnap = await getDoc(docRef);
-    console.log('Document Snapshot:', docSnap.data());
 
     if (docSnap.exists()) {
       const docData = docSnap.data();
@@ -42,10 +36,9 @@ const handleInventoryUpdate = async (
 
     // Fetch and update inventory
     const result = await updateInventory(userId);
-    console.log("value returned handleInventoryUpdate", result);
     setInventory(result);
   } catch (error) {
-    console.error('Error in handleInventoryUpdate:', error);
+    console.error('Error in handleInventoryUpdate:');
   }
 };
 
